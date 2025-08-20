@@ -29,14 +29,7 @@ import { Label } from '@/components/ui/label';
 import InputError from '@/components/input-error';
 import CurrencySelect, { CURRENCIES } from '@/components/currency-select';
 import Heading from '@/components/heading';
-
-interface Account {
-  id: number;
-  name: string;
-  currency: string;
-  created_at: string;
-  updated_at: string;
-}
+import type { Account } from '@/types/models';
 
 interface AccountsProps {
   accounts: Account[];
