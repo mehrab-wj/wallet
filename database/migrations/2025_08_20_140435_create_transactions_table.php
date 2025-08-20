@@ -25,7 +25,7 @@ return new class extends Migration
             $table->decimal('amount', 15, 4); // this is the final amount in the account currency
             $table->decimal('rate', 10, 6)->nullable();
 
-            $table->string('label', 100);
+            $table->string('label', 100)->nullable();
             $table->text('description')->nullable();
 
             $table->date('transaction_date');
