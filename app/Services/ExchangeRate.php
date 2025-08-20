@@ -4,12 +4,14 @@ namespace App\Services;
 
 use Exception;
 use Illuminate\Http\Client\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class ExchangeRate
 {
     private string $apiKey;
     private string $baseUrl = 'https://v6.exchangerate-api.com/v6';
+    private int $cacheHours = 3;
 
     public function __construct(?string $apiKey = null)
     {
@@ -30,11 +32,15 @@ class ExchangeRate
      */
     public function getPairRate(string $baseCurrency, string $targetCurrency): array
     {
-        $url = "{$this->baseUrl}/{$this->apiKey}/pair/{$baseCurrency}/{$targetCurrency}";
+        $cacheKey = "exchange_rate.pair.{$baseCurrency}.{$targetCurrency}";
         
-        $response = Http::get($url);
-        
-        return $this->handleResponse($response);
+        return Cache::remember($cacheKey, now()->addHours($this->cacheHours), function () use ($baseCurrency, $targetCurrency) {
+            $url = "{$this->baseUrl}/{$this->apiKey}/pair/{$baseCurrency}/{$targetCurrency}";
+            
+            $response = Http::get($url);
+            
+            return $this->handleResponse($response);
+        });
     }
 
     /**
@@ -48,11 +54,16 @@ class ExchangeRate
      */
     public function convertAmount(string $baseCurrency, string $targetCurrency, float $amount): array
     {
-        $url = "{$this->baseUrl}/{$this->apiKey}/pair/{$baseCurrency}/{$targetCurrency}/{$amount}";
+        // Get the pair rate (this will use cache if available)
+        $pairData = $this->getPairRate($baseCurrency, $targetCurrency);
         
-        $response = Http::get($url);
+        // Calculate the conversion result
+        $conversionResult = $pairData['conversion_rate'] * $amount;
         
-        return $this->handleResponse($response);
+        // Return the same structure as the API would return
+        return array_merge($pairData, [
+            'conversion_result' => $conversionResult
+        ]);
     }
 
     /**
@@ -126,4 +137,5 @@ class ExchangeRate
         $data = $this->convertAmount($baseCurrency, $targetCurrency, $amount);
         return $data['conversion_result'];
     }
+
 }
