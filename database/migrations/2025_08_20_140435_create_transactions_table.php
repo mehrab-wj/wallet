@@ -36,7 +36,6 @@ return new class extends Migration
             $table->index(['account_id', 'transaction_date']);
             $table->index(['category_id']);
             $table->index('type');
-            $table->index('status');
         });
     }
 

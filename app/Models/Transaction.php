@@ -28,7 +28,6 @@ class Transaction extends Model
         'description',
         'transaction_date',
         'reference',
-        'status',
     ];
 
     /**
@@ -81,13 +80,5 @@ class Transaction extends Model
     public function scopeExpense($query)
     {
         return $query->where('type', 'expense');
-    }
-
-    /**
-     * Scope a query to only include completed transactions.
-     */
-    public function scopeCompleted($query)
-    {
-        return $query->where('status', 'completed');
     }
 }
