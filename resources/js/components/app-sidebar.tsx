@@ -18,6 +18,11 @@ const mainNavItems: NavItem[] = [
         href: '/accounts',
         icon: LayoutGrid,
     },
+    {
+        title: 'Categories',
+        href: '/categories',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
