@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Head, Form, router } from '@inertiajs/react';
+import { Head, Form } from '@inertiajs/react';
 import { Plus, Edit, Trash2, DollarSign } from 'lucide-react';
 
 import AppLayout from '@/layouts/app-layout';
@@ -15,6 +15,15 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '@/components/ui/drawer';
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import InputError from '@/components/input-error';
@@ -43,11 +52,7 @@ export default function Accounts({ accounts }: AccountsProps) {
     setIsEditDrawerOpen(true);
   };
 
-  const handleDelete = (account: Account) => {
-    if (confirm(`Are you sure you want to delete "${account.name}"?`)) {
-      router.delete(`/accounts/${account.id}`);
-    }
-  };
+  // Delete is handled via a Dialog + Inertia Form below
 
   const getCurrencySymbol = (currencyCode: string) => {
     const currency = CURRENCIES.find(c => c.code === currencyCode);
@@ -181,14 +186,38 @@ export default function Accounts({ accounts }: AccountsProps) {
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => handleDelete(account)}
-                        className="h-8 w-8 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-destructive hover:text-destructive"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogTitle>Delete account?</DialogTitle>
+                          <DialogDescription>
+                            Are you sure you want to delete "{account.name}"? This action cannot be undone.
+                          </DialogDescription>
+
+                          <Form method="delete" action={route('accounts.destroy', account.id)} options={{ preserveScroll: true }}>
+                            {({ processing }) => (
+                              <DialogFooter className="gap-2">
+                                <DialogClose asChild>
+                                  <Button variant="secondary" disabled={processing}>
+                                    Cancel
+                                  </Button>
+                                </DialogClose>
+                                <Button variant="destructive" disabled={processing} asChild>
+                                  <button type="submit">Delete</button>
+                                </Button>
+                              </DialogFooter>
+                            )}
+                          </Form>
+                        </DialogContent>
+                      </Dialog>
                     </div>
                   </div>
                 </CardHeader>
