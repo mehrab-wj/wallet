@@ -21,6 +21,7 @@ class ProfileController extends Controller
         return Inertia::render('settings/profile', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => $request->session()->get('status'),
+            'token' => $request->session()->get('token'),
         ]);
     }
 
@@ -59,5 +60,14 @@ class ProfileController extends Controller
         $request->session()->regenerateToken();
 
         return redirect('/');
+    }
+
+    public function generateToken(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        $token = $request->user()->createToken('api-token')->plainTextToken;
+
+        return redirect()->back()->with('token', $token);
     }
 }

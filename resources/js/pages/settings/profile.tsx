@@ -22,6 +22,8 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
+
+    const [token, setToken] = useState<string | null>(null);
     const [mainCurrency, setMainCurrency] = useState<string>(auth.user.main_currency);
 
     return (
@@ -117,6 +119,60 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                         leaveTo="opacity-0"
                                     >
                                         <p className="text-sm text-neutral-600">Saved</p>
+                                    </Transition>
+                                </div>
+                            </>
+                        )}
+                    </Form>
+                </div>
+
+                <div className="space-y-6">
+                    <HeadingSmall title="API Tokens" description="Manage your API tokens" />
+                    <Form
+                        method="patch"
+                        action={route('profile.generate-token')}
+                        options={{
+                            preserveScroll: true,
+                        }}
+                        className="space-y-6"
+                        onSuccess={(data) => {
+                            setToken(data.props.token as string);
+                            console.log(data.props.token);
+                        }}
+                    >
+                        {({ processing, recentlySuccessful, errors }) => (
+                            <>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="api_token">API Token</Label>
+                                    <Input
+                                        id="api_token"
+                                        className="mt-1 block w-full"
+                                        name="api_token"
+                                        value={token ?? 'SECRET TOKEN PLACEHOLDER'}
+                                        autoComplete="off"
+                                        readOnly={true}
+                                        type={token === null ? 'password' : 'text'}
+                                    />
+                                    <p className="text-sm text-neutral-600 dark:text-neutral-400">
+                                        By generating a new token, you will invalidate the previous one.
+                                    </p>
+
+                                    <InputError className="mt-2" message={errors.api_token} />
+                                </div>
+
+                                <div className="flex items-center gap-4">
+                                    <Button disabled={processing} variant={'secondary'}>
+                                        Generate a new token
+                                    </Button>
+
+                                    <Transition
+                                        show={recentlySuccessful}
+                                        enter="transition ease-in-out"
+                                        enterFrom="opacity-0"
+                                        leave="transition ease-in-out"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <p className="text-sm text-neutral-600">Token generated</p>
                                     </Transition>
                                 </div>
                             </>
