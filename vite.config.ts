@@ -25,11 +25,11 @@ export default defineConfig({
             manifest: {
                 name: 'Wallet',
                 short_name: 'Wallet',
-                start_url: '/',
+                start_url: '/dashboard',
                 scope: '/',
                 display: 'standalone',
-                background_color: '#0f172a',
-                theme_color: '#0f172a',
+                background_color: '#2d5cf2',
+                theme_color: '#2d5cf2',
                 icons: [
                     { src: '/icon.png', sizes: '192x192', type: 'image/png' },
                     { src: '/icon.png', sizes: '512x512', type: 'image/png' },
