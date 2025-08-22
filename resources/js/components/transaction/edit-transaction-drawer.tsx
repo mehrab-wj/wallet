@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Drawer, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 import CurrencySelect from '@/components/currency-select';
 import { DatePicker } from '@/components/date-picker';
@@ -13,6 +15,7 @@ import InputError from '@/components/input-error';
 
 import { type Account, type Category, type Transaction } from '@/types/models';
 import { Form } from '@inertiajs/react';
+import { Trash2 } from 'lucide-react';
 
 interface EditTransactionDrawerProps {
     open: boolean;
@@ -42,16 +45,15 @@ export default function EditTransactionDrawer({ open, onOpenChange, accounts, ca
         onSuccess();
     };
 
+    if (!transaction) {
+        return null;
+    }
+
     return (
         <Drawer open={open} onOpenChange={onOpenChange}>
             <DrawerContent>
-                {transaction && (
-                    <Form
-                        className="overflow-y-auto"
-                        method="put"
-                        action={route('transactions.update', transaction.id)}
-                        onSuccess={handleSuccess}
-                    >
+                <div className="overflow-y-auto">
+                    <Form method="put" action={route('transactions.update', transaction.id)} onSuccess={handleSuccess}>
                         {({ processing, errors }) => (
                             <>
                                 <DrawerHeader>
@@ -64,10 +66,16 @@ export default function EditTransactionDrawer({ open, onOpenChange, accounts, ca
                                     <div className="space-y-2">
                                         <Tabs value={transactionType} onValueChange={(value) => setTransactionType(value as 'income' | 'expense')}>
                                             <TabsList className="grid w-full grid-cols-2">
-                                                <TabsTrigger value="expense" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                                                <TabsTrigger
+                                                    value="expense"
+                                                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                                                >
                                                     Expense
                                                 </TabsTrigger>
-                                                <TabsTrigger value="income" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+                                                <TabsTrigger
+                                                    value="income"
+                                                    className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                                                >
                                                     Income
                                                 </TabsTrigger>
                                             </TabsList>
@@ -160,7 +168,13 @@ export default function EditTransactionDrawer({ open, onOpenChange, accounts, ca
                                     {/* Label */}
                                     <div className="space-y-2">
                                         <Label htmlFor="edit-label">Label (optional)</Label>
-                                        <Input id="edit-label" name="label" defaultValue={transaction.label || ''} placeholder="e.g. Grocery shopping, Salary payment" disabled={processing} />
+                                        <Input
+                                            id="edit-label"
+                                            name="label"
+                                            defaultValue={transaction.label || ''}
+                                            placeholder="e.g. Grocery shopping, Salary payment"
+                                            disabled={processing}
+                                        />
                                         <InputError message={errors.label} />
                                     </div>
 
@@ -191,19 +205,54 @@ export default function EditTransactionDrawer({ open, onOpenChange, accounts, ca
                                     <Button type="submit" disabled={processing}>
                                         {processing ? 'Updating...' : 'Update Transaction'}
                                     </Button>
-                                    <DrawerClose asChild>
+                                    {/* <DrawerClose asChild>
                                         <Button variant="outline" disabled={processing}>
                                             Cancel
                                         </Button>
-                                    </DrawerClose>
+                                    </DrawerClose> */}
                                 </DrawerFooter>
                             </>
                         )}
                     </Form>
-                )}
+
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <div className="mb-4 w-full px-4">
+                                <Button variant="ghost" className="w-full text-destructive hover:text-destructive">
+                                    <Trash2 className="h-4 w-4" />
+                                    Delete
+                                </Button>
+                            </div>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogTitle>Delete transaction?</DialogTitle>
+                            <DialogDescription>
+                                Are you sure you want to delete "{transaction.label || 'this transaction'}"? This action cannot be undone.
+                            </DialogDescription>
+
+                            <Form
+                                method="delete"
+                                action={route('transactions.destroy', transaction.id)}
+                                onSuccess={() => onOpenChange(false)}
+                                options={{ preserveScroll: true }}
+                            >
+                                {({ processing }) => (
+                                    <DialogFooter className="gap-2">
+                                        <DialogClose asChild>
+                                            <Button variant="secondary" disabled={processing}>
+                                                Cancel
+                                            </Button>
+                                        </DialogClose>
+                                        <Button variant="destructive" disabled={processing} asChild>
+                                            <button type="submit">Delete</button>
+                                        </Button>
+                                    </DialogFooter>
+                                )}
+                            </Form>
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </DrawerContent>
         </Drawer>
     );
 }
-
-

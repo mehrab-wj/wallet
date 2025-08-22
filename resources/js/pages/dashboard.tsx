@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { Plus } from 'lucide-react';
 
  
-import { TransactionItem } from '@/components/transaction-item';
+import { TransactionItem } from '@/components/transaction/transaction-item';
 import CreateTransactionsDrawer from '@/components/transaction/create-transaction-drawer';
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
 import AppLayout from '@/layouts/app-layout';
@@ -61,13 +61,13 @@ export default function Dashboard() {
         }).format(amount);
     };
 
-    const formatDate = (dateString: string) => {
-        return new Date(dateString).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-        });
-    };
+    // const formatDate = (dateString: string) => {
+    //     return new Date(dateString).toLocaleDateString('en-US', {
+    //         month: 'short',
+    //         day: 'numeric',
+    //         year: 'numeric',
+    //     });
+    // };
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -124,7 +124,6 @@ export default function Dashboard() {
                                 transaction={transaction}
                                 onEdit={handleEdit}
                                 formatCurrency={formatCurrency}
-                                formatDate={formatDate}
                             />
                         ))}
                     </div>
