@@ -2,6 +2,7 @@ import { type BreadcrumbItem, type SharedData } from '@/types';
 import { Transition } from '@headlessui/react';
 import { Form, Head, Link, usePage } from '@inertiajs/react';
 
+import CurrencySelect from '@/components/currency-select';
 import DeleteUser from '@/components/delete-user';
 import HeadingSmall from '@/components/heading-small';
 import InputError from '@/components/input-error';
@@ -10,6 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AppLayout from '@/layouts/app-layout';
 import SettingsLayout from '@/layouts/settings/layout';
+import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -20,6 +22,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: boolean; status?: string }) {
     const { auth } = usePage<SharedData>().props;
+    const [mainCurrency, setMainCurrency] = useState<string>(auth.user.main_currency);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -70,6 +73,15 @@ export default function Profile({ mustVerifyEmail, status }: { mustVerifyEmail: 
                                     />
 
                                     <InputError className="mt-2" message={errors.email} />
+                                </div>
+
+                                <div className="grid gap-2">
+                                    <Label htmlFor="main_currency">Main currency</Label>
+
+                                    <CurrencySelect value={mainCurrency} onValueChange={setMainCurrency} name="main_currency" required />
+                                    <input type="hidden" name="main_currency" value={mainCurrency} />
+
+                                    <InputError className="mt-2" message={errors.main_currency} />
                                 </div>
 
                                 {mustVerifyEmail && auth.user.email_verified_at === null && (
