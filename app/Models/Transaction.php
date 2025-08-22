@@ -27,7 +27,6 @@ class Transaction extends Model
         'label',
         'description',
         'transaction_date',
-        'reference',
     ];
 
     /**

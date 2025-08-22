@@ -26,12 +26,13 @@ export interface Transaction {
 	input_amount: number;
 	input_currency: string;
 	amount: number;
-	rate: number;
-	label: string;
+	rate?: number;
+	label?: string;
 	description?: string;
 	transaction_date: string;
-	reference?: string;
-	status: 'pending' | 'completed' | 'cancelled';
 	created_at: string;
 	updated_at: string;
+	// Relations
+	account?: Account;
+	category?: Category;
 }

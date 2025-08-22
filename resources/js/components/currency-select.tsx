@@ -64,10 +64,10 @@ export default function CurrencySelect({
               <span className="font-mono text-sm font-medium">
                 {currency.code}
               </span>
-              <span className="text-muted-foreground">
+              <span className="text-muted-foreground hidden sm:block">
                 {currency.name}
               </span>
-              <span className="ml-auto text-muted-foreground">
+              <span className="ml-auto text-muted-foreground hidden sm:block">
                 {currency.symbol}
               </span>
             </div>
