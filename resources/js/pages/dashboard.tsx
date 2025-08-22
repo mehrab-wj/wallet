@@ -10,10 +10,10 @@ import CreateTransactionsDrawer from '@/components/transaction/create-transactio
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
 import { TransactionItem } from '@/components/transaction/transaction-item';
 import AppLayout from '@/layouts/app-layout';
+import { formatCurrency } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type Account, type Category, type Transaction } from '@/types/models';
 import { Head, usePage } from '@inertiajs/react';
-import { formatCurrency } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -33,6 +33,7 @@ interface DashboardProps {
     transactions: Transaction[];
     accounts: Account[];
     categories: Category[];
+    mainCurrency: string;
     [key: string]: unknown;
 }
 
@@ -61,7 +62,9 @@ export default function Dashboard() {
                         <Card>
                             <CardHeader>
                                 <CardDescription>Income</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatCurrency(income)}</CardTitle>
+                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                    {formatCurrency(income, props.mainCurrency)}
+                                </CardTitle>
                             </CardHeader>
                         </Card>
                     </div>
@@ -70,7 +73,7 @@ export default function Dashboard() {
                             <CardHeader>
                                 <CardDescription>Expense</CardDescription>
                                 <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {formatCurrency(expense)}
+                                    {formatCurrency(expense, props.mainCurrency)}
                                 </CardTitle>
                             </CardHeader>
                         </Card>
@@ -79,7 +82,9 @@ export default function Dashboard() {
                         <Card>
                             <CardHeader>
                                 <CardDescription>Total</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{formatCurrency(total)}</CardTitle>
+                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
+                                    {formatCurrency(total, props.mainCurrency)}
+                                </CardTitle>
                             </CardHeader>
                         </Card>
                     </div>
