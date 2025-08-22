@@ -112,7 +112,7 @@ export default function Dashboard() {
                         </Button>
                     </div>
                 ) : (
-                    <div className="space-y-3">
+                    <div className="space-y-3 pb-18">
                         {(() => {
                             // Initialize with today's date in YYYY-MM-DD format
                             let currentDate = new Date().toISOString().split('T')[0];
