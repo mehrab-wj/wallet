@@ -1,20 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
- 
+
 import { useState } from 'react';
 
- 
 import { Plus } from 'lucide-react';
 
- 
-import { TransactionItem } from '@/components/transaction/transaction-item';
+import { DateSeparator } from '@/components/date-separator';
 import CreateTransactionsDrawer from '@/components/transaction/create-transaction-drawer';
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
-import { DateSeparator } from '@/components/date-separator';
+import { TransactionItem } from '@/components/transaction/transaction-item';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { type Account, type Category, type Transaction } from '@/types/models';
 import { Head, usePage } from '@inertiajs/react';
+import { formatCurrency } from '@/lib/utils';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -44,25 +43,13 @@ export default function Dashboard() {
 
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
     const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
-    
+
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
-    
 
     const handleEdit = (transaction: Transaction) => {
         setEditingTransaction(transaction);
         setIsEditDrawerOpen(true);
     };
-
-    
-
-    const formatCurrency = (amount: number) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(amount);
-    };
-
-
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -116,24 +103,18 @@ export default function Dashboard() {
                         {(() => {
                             // Initialize with today's date in YYYY-MM-DD format
                             let currentDate = new Date().toISOString().split('T')[0];
-                            
+
                             return transactions.map((transaction) => {
                                 const showSeparator = transaction.transaction_date !== currentDate;
-                                
+
                                 if (showSeparator) {
                                     currentDate = transaction.transaction_date;
                                 }
-                                
+
                                 return (
                                     <div key={transaction.id}>
-                                        {showSeparator && (
-                                            <DateSeparator date={transaction.transaction_date} />
-                                        )}
-                                        <TransactionItem
-                                            transaction={transaction}
-                                            onEdit={handleEdit}
-                                            formatCurrency={formatCurrency}
-                                        />
+                                        {showSeparator && <DateSeparator date={transaction.transaction_date} />}
+                                        <TransactionItem transaction={transaction} onEdit={handleEdit} />
                                     </div>
                                 );
                             });

@@ -1,13 +1,13 @@
+import { formatCurrency } from '@/lib/utils';
 import { type Transaction } from '@/types/models';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 
 interface TransactionItemProps {
     transaction: Transaction;
     onEdit: (transaction: Transaction) => void;
-    formatCurrency: (amount: number) => string;
 }
 
-export function TransactionItem({ transaction, onEdit, formatCurrency }: TransactionItemProps) {
+export function TransactionItem({ transaction, onEdit }: TransactionItemProps) {
     return (
         <div
             key={transaction.id}
@@ -37,12 +37,11 @@ export function TransactionItem({ transaction, onEdit, formatCurrency }: Transac
                         className={`font-semibold ${transaction.type === 'income' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
                     >
                         {transaction.type === 'income' ? '+' : '-'}
-                        {formatCurrency(transaction.amount)}
+                        {formatCurrency(transaction.amount, transaction.account?.currency)}
                     </p>
-                    {transaction.input_currency !== 'USD' && (
-                        <p className="text-xs text-muted-foreground">
-                            {formatCurrency(transaction.input_amount)} {transaction.input_currency}
-                        </p>
+
+                    {transaction.input_currency !== transaction.account?.currency && (
+                        <p className="text-xs text-muted-foreground">{formatCurrency(transaction.input_amount, transaction.input_currency)}</p>
                     )}
                 </div>
             </div>
