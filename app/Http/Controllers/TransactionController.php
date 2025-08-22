@@ -15,7 +15,7 @@ class TransactionController extends Controller
     {
         $validated = $request->validated();
 
-        $account = Account::find($validated['account_id']);
+        $account = Account::where('user_id', Auth::id())->find($validated['account_id']);
         $rate = 1;
 
         if ($validated['input_currency'] !== $account->currency) {
@@ -48,7 +48,29 @@ class TransactionController extends Controller
             abort(403);
         }
 
-        $transaction->update($request->validated());
+        $validated = $request->validated();
+
+        $account = Account::where('user_id', Auth::id())->find($validated['account_id']);
+        $rate = 1;
+
+        if ($validated['input_currency'] !== $account->currency) {
+            $rate = ExchangeRate::getRate($validated['input_currency'], $account->currency);
+        }
+
+        $amount = $validated['input_amount'] * $rate;
+
+        $transaction->update([
+            'account_id' => $validated['account_id'],
+            'category_id' => $validated['category_id'],
+            'type' => $validated['type'],
+            'input_amount' => $validated['input_amount'],
+            'input_currency' => $validated['input_currency'],
+            'amount' => $amount,
+            'rate' => $rate,
+            'label' => $validated['label'],
+            'description' => $validated['description'],
+            'transaction_date' => $validated['transaction_date'],
+        ]);
 
         return redirect()->back();
     }

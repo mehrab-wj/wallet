@@ -46,6 +46,7 @@ export default function Dashboard() {
 
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
     const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
+    const [input_currency, setInputCurrency] = useState<string>('USD');
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
     const [date, setDate] = useState<Date>(new Date());
     const [transactionType, setTransactionType] = useState<'income' | 'expense'>('expense');
@@ -53,6 +54,7 @@ export default function Dashboard() {
     const handleEdit = (transaction: Transaction) => {
         setEditingTransaction(transaction);
         setTransactionType(transaction.type);
+        setInputCurrency(transaction.input_currency);
         setDate(new Date(transaction.transaction_date));
         setIsEditDrawerOpen(true);
     };
@@ -197,7 +199,17 @@ export default function Dashboard() {
                                         {/* Account Selection */}
                                         <div className="space-y-2">
                                             <Label htmlFor="account_id">Account</Label>
-                                            <Select name="account_id" required disabled={processing}>
+                                            <Select
+                                                onValueChange={(value) => {
+                                                    const accountCurrency = accounts.find((account) => account.id.toString() === value)?.currency;
+                                                    if (accountCurrency) {
+                                                        setInputCurrency(accountCurrency);
+                                                    }
+                                                }}
+                                                name="account_id"
+                                                required
+                                                disabled={processing}
+                                            >
                                                 <SelectTrigger>
                                                     <SelectValue placeholder="Select account..." />
                                                 </SelectTrigger>
@@ -248,7 +260,14 @@ export default function Dashboard() {
                                             </div>
                                             <div className="col-span-2 space-y-2">
                                                 <Label htmlFor="input_currency">Currency</Label>
-                                                <CurrencySelect name="input_currency" placeholder="Currency" disabled={processing} required />
+                                                <CurrencySelect
+                                                    name="input_currency"
+                                                    value={input_currency}
+                                                    onValueChange={(value) => setInputCurrency(value)}
+                                                    placeholder="Currency"
+                                                    disabled={processing}
+                                                    required
+                                                />
                                                 <InputError message={errors.input_currency} />
                                             </div>
                                         </div>
@@ -353,6 +372,12 @@ export default function Dashboard() {
                                             <div className="space-y-2">
                                                 <Label htmlFor="edit-account_id">Account</Label>
                                                 <Select
+                                                    onValueChange={(value) => {
+                                                        const accountCurrency = accounts.find((account) => account.id.toString() === value)?.currency;
+                                                        if (accountCurrency) {
+                                                            setInputCurrency(accountCurrency);
+                                                        }
+                                                    }}
                                                     name="account_id"
                                                     defaultValue={editingTransaction.account_id.toString()}
                                                     required
@@ -416,7 +441,8 @@ export default function Dashboard() {
                                                     <Label htmlFor="edit-input_currency">Currency</Label>
                                                     <CurrencySelect
                                                         name="input_currency"
-                                                        value={editingTransaction.input_currency}
+                                                        value={input_currency}
+                                                        onValueChange={(value) => setInputCurrency(value)}
                                                         placeholder="Select currency..."
                                                         disabled={processing}
                                                         required
