@@ -10,6 +10,7 @@ import { Plus } from 'lucide-react';
 import { TransactionItem } from '@/components/transaction/transaction-item';
 import CreateTransactionsDrawer from '@/components/transaction/create-transaction-drawer';
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
+import { DateSeparator } from '@/components/date-separator';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { type Account, type Category, type Transaction } from '@/types/models';
@@ -61,13 +62,7 @@ export default function Dashboard() {
         }).format(amount);
     };
 
-    // const formatDate = (dateString: string) => {
-    //     return new Date(dateString).toLocaleDateString('en-US', {
-    //         month: 'short',
-    //         day: 'numeric',
-    //         year: 'numeric',
-    //     });
-    // };
+
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -118,14 +113,31 @@ export default function Dashboard() {
                     </div>
                 ) : (
                     <div className="space-y-3">
-                        {transactions.map((transaction) => (
-                            <TransactionItem
-                                key={transaction.id}
-                                transaction={transaction}
-                                onEdit={handleEdit}
-                                formatCurrency={formatCurrency}
-                            />
-                        ))}
+                        {(() => {
+                            // Initialize with today's date in YYYY-MM-DD format
+                            let currentDate = new Date().toISOString().split('T')[0];
+                            
+                            return transactions.map((transaction) => {
+                                const showSeparator = transaction.transaction_date !== currentDate;
+                                
+                                if (showSeparator) {
+                                    currentDate = transaction.transaction_date;
+                                }
+                                
+                                return (
+                                    <div key={transaction.id}>
+                                        {showSeparator && (
+                                            <DateSeparator date={transaction.transaction_date} />
+                                        )}
+                                        <TransactionItem
+                                            transaction={transaction}
+                                            onEdit={handleEdit}
+                                            formatCurrency={formatCurrency}
+                                        />
+                                    </div>
+                                );
+                            });
+                        })()}
                     </div>
                 )}
 
