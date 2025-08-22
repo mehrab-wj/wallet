@@ -53,5 +53,16 @@ class CreateDefaultCategoriesForUser
         ];
 
         Category::insert($defaultCategories);
+
+        // Create two default accounts
+        $user->accounts()->create([
+            'name' => 'Bank Account',
+            'currency' => 'USD',
+        ]);
+
+        $user->accounts()->create([
+            'name' => 'Cash',
+            'currency' => 'USD',
+        ]);
     }
 }
