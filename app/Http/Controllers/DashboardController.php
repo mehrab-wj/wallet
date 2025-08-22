@@ -62,7 +62,7 @@ class DashboardController extends Controller
 
         // Get user's accounts and categories for the forms
         $accounts = $user->accounts()->orderBy('name')->get();
-        $categories = $user->categories()->orderBy('type')->orderBy('name')->get();
+        $categories = $user->categories()->orderBy('type')->orderBy('sort_order')->orderBy('name')->get();
 
         return Inertia::render('dashboard', [
             'dashboardData' => [
