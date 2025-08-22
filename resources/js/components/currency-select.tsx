@@ -8,6 +8,8 @@ export interface Currency {
 
 export const CURRENCIES: Currency[] = [
   { code: 'USD', name: 'US Dollar', symbol: '$' },
+  { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp' },
+  { code: 'VND', name: 'Vietnamese Dong', symbol: '₫' },
   { code: 'EUR', name: 'Euro', symbol: '€' },
   { code: 'GBP', name: 'British Pound', symbol: '£' },
   { code: 'JPY', name: 'Japanese Yen', symbol: '¥' },
