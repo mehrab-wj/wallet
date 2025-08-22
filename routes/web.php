@@ -4,12 +4,10 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TransactionController;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+Route::get('/', fn() => Redirect::route('dashboard'))->name('home');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
