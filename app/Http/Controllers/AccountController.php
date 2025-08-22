@@ -22,11 +22,7 @@ class AccountController extends Controller
 
     public function store(AccountRequest $request)
     {
-        Account::create([
-            'user_id' => Auth::id(),
-            'name' => $request->validated()['name'],
-            'currency' => $request->validated()['currency'],
-        ]);
+        $request->user()->accounts()->create($request->validated());
 
         return redirect()->back();
     }
