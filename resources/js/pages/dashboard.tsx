@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 
 import { useEffect, useState } from 'react';
 
@@ -14,7 +14,7 @@ import AppLayout from '@/layouts/app-layout';
 import { formatCurrency } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type Account, type Category, type Transaction } from '@/types/models';
-import { Head, usePage, router } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -69,53 +69,34 @@ export default function Dashboard() {
         const year = selectedMonth.getFullYear();
         const month = String(selectedMonth.getMonth() + 1).padStart(2, '0');
         const dateParam = `${year}-${month}-01`;
-        router.get(
-            '/dashboard',
-            { date: dateParam },
-            { preserveScroll: true, preserveState: true, replace: true },
-        );
+        router.get('/dashboard', { date: dateParam }, { preserveScroll: true, preserveState: true, replace: true });
     }, [selectedMonth]);
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
-            <header className="mt-4 flex justify-end px-4">
+            <div className="mt-4 flex justify-end px-4">
                 <SelectMonth selectedMonth={selectedMonth} onMonthSelect={setSelectedMonth} />
-            </header>
+            </div>
+
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {/* Stats Cards */}
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="">
-                        <Card>
-                            <CardHeader>
-                                <CardDescription>Income</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {formatCurrency(income, props.mainCurrency)}
-                                </CardTitle>
-                            </CardHeader>
-                        </Card>
+                <Card className="grid grid-cols-3 gap-1 overflow-hidden text-center">
+                    <div>
+                        <span className="block text-xs font-medium">Income</span>
+                        <span className="text-sm font-semibold">{formatCurrency(income, props.mainCurrency)}</span>
                     </div>
-                    <div className="">
-                        <Card>
-                            <CardHeader>
-                                <CardDescription>Expense</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {formatCurrency(expense, props.mainCurrency)}
-                                </CardTitle>
-                            </CardHeader>
-                        </Card>
+                    <div>
+                        <span className="block text-xs font-medium">Expense</span>
+                        <span className="text-sm font-semibold">{formatCurrency(expense, props.mainCurrency)}</span>
                     </div>
-                    <div className="">
-                        <Card>
-                            <CardHeader>
-                                <CardDescription>Total</CardDescription>
-                                <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-                                    {formatCurrency(total, props.mainCurrency)}
-                                </CardTitle>
-                            </CardHeader>
-                        </Card>
+                    <div>
+                        <span className="block text-xs font-medium">Total</span>
+                        <span className={`text-sm font-semibold ${total > 0 ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}>
+                            {formatCurrency(total, props.mainCurrency)}
+                        </span>
                     </div>
-                </div>
+                </Card>
 
                 {/* Recent Transactions */}
                 {transactions.length === 0 ? (
