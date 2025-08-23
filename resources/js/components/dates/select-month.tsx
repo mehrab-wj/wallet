@@ -2,8 +2,8 @@ import { Icon } from '@/components/icon';
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 const MONTHS = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -45,7 +45,7 @@ export function SelectMonth({ selectedMonth = new Date(), onMonthSelect, trigger
                     {trigger ? (
                         trigger
                     ) : (
-                        <Button className="rounded-none w-32" variant="outline">
+                        <Button className="w-32 rounded-none" variant="outline">
                             {selectedMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                         </Button>
                     )}
@@ -59,14 +59,17 @@ export function SelectMonth({ selectedMonth = new Date(), onMonthSelect, trigger
                 <div className="flex items-center justify-between border-b p-4">
                     <div className="flex items-center gap-4">
                         <span className="font-medium text-popover-foreground">Date</span>
-                        <span className="text-sm text-muted-foreground">THIS MONTH</span>
-                    </div>
-                    <PopoverPrimitive.Close asChild>
                         <Button
                             variant="ghost"
-                            size="icon"
-                            className="h-6 w-6 text-muted-foreground hover:text-popover-foreground"
+                            className="text-sm text-muted-foreground"
+                            disabled={selectedMonth.getMonth() === new Date().getMonth() && selectedMonth.getFullYear() === new Date().getFullYear()}
+                            onClick={() => handleMonthSelect(new Date().getMonth())}
                         >
+                            THIS MONTH
+                        </Button>
+                    </div>
+                    <PopoverPrimitive.Close asChild>
+                        <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-popover-foreground">
                             <Icon iconNode={X} className="h-4 w-4" />
                         </Button>
                     </PopoverPrimitive.Close>
