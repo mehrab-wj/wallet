@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Plus } from 'lucide-react';
 
 import { DateSeparator } from '@/components/dates/date-separator';
+import { SelectMonth } from '@/components/dates/select-month';
 import CreateTransactionsDrawer from '@/components/transaction/create-transaction-drawer';
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
 import { TransactionItem } from '@/components/transaction/transaction-item';
@@ -44,8 +45,8 @@ export default function Dashboard() {
 
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
     const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false);
-
     const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+    const [selectedMonth, setSelectedMonth] = useState<Date>(new Date());
 
     const handleEdit = (transaction: Transaction) => {
         setEditingTransaction(transaction);
@@ -55,6 +56,12 @@ export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
+            <header className="mt-4 flex justify-end px-4">
+                <SelectMonth
+                    selectedMonth={selectedMonth}
+                    onMonthSelect={setSelectedMonth}
+                />
+            </header>
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {/* Stats Cards */}
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
