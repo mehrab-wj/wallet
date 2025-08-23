@@ -23,6 +23,11 @@ const mainNavItems: NavItem[] = [
         href: '/categories',
         icon: LayoutGrid,
     },
+    {
+        title: 'Subscriptions',
+        href: '/subscriptions',
+        icon: LayoutGrid,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
