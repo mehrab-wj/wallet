@@ -8,7 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle } from '@/components/ui/drawer';
 
 import CurrencySelect from '@/components/currency-select';
-import { DatePicker } from '@/components/date-picker';
+import { DatePicker } from '@/components/dates/date-picker';
 import InputError from '@/components/input-error';
 
 import { type Account, type Category } from '@/types/models';

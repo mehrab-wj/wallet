@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 import { Plus } from 'lucide-react';
 
-import { DateSeparator } from '@/components/date-separator';
+import { DateSeparator } from '@/components/dates/date-separator';
 import CreateTransactionsDrawer from '@/components/transaction/create-transaction-drawer';
 import EditTransactionDrawer from '@/components/transaction/edit-transaction-drawer';
 import { TransactionItem } from '@/components/transaction/transaction-item';

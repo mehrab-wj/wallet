@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import CurrencySelect from '@/components/currency-select';
-import { DatePicker } from '@/components/date-picker';
+import { DatePicker } from '@/components/dates/date-picker';
 import InputError from '@/components/input-error';
 
 import { type Account, type Category, type Transaction } from '@/types/models';
