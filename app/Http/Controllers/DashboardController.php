@@ -7,18 +7,30 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $user = Auth::user();
 
         // Sum amounts grouped by account currency and transaction type, then convert to user's main currency
         $mainCurrency = $user->main_currency;
 
-        $currentMonthStart = Carbon::now()->startOfMonth();
-        $currentMonthEnd = Carbon::now()->endOfMonth();
+        // Accept an optional `date` query param (YYYY-MM-01) to scope data
+        if ($requestedDate = $request->query('date')) {
+            try {
+                $baseDate = Carbon::parse($requestedDate);
+            } catch (\Throwable $e) {
+                $baseDate = Carbon::now();
+            }
+        } else {
+            $baseDate = Carbon::now();
+        }
+
+        $currentMonthStart = $baseDate->copy()->startOfMonth();
+        $currentMonthEnd = $baseDate->copy()->endOfMonth();
 
         $groupedSums = Transaction::selectRaw('transactions.type, accounts.currency, SUM(transactions.amount) as sum_amount')
             ->join('accounts', 'transactions.account_id', '=', 'accounts.id')
@@ -79,6 +91,7 @@ class DashboardController extends Controller
             'accounts' => $accounts,
             'categories' => $categories,
             'mainCurrency' => $mainCurrency,
+            'selectedDate' => $baseDate->copy()->startOfMonth()->toDateString(),
         ]);
     }
 }

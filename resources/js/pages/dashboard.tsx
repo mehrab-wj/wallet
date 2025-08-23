@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Plus } from 'lucide-react';
 
@@ -14,7 +14,7 @@ import AppLayout from '@/layouts/app-layout';
 import { formatCurrency } from '@/lib/utils';
 import { type BreadcrumbItem } from '@/types';
 import { type Account, type Category, type Transaction } from '@/types/models';
-import { Head, usePage } from '@inertiajs/react';
+import { Head, usePage, router } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -35,12 +35,13 @@ interface DashboardProps {
     accounts: Account[];
     categories: Category[];
     mainCurrency: string;
+    selectedDate?: string;
     [key: string]: unknown;
 }
 
 export default function Dashboard() {
     const { props } = usePage<DashboardProps>();
-    const { dashboardData, transactions, accounts, categories } = props;
+    const { dashboardData, transactions, accounts, categories, selectedDate } = props;
     const { income = 0, expense = 0, total = 0 } = dashboardData || {};
 
     const [isCreateDrawerOpen, setIsCreateDrawerOpen] = useState(false);
@@ -53,14 +54,33 @@ export default function Dashboard() {
         setIsEditDrawerOpen(true);
     };
 
+    // Initialize selected month from server-provided query (if present)
+    useEffect(() => {
+        if (selectedDate) {
+            const parsed = new Date(selectedDate);
+            if (!Number.isNaN(parsed.getTime())) {
+                setSelectedMonth(parsed);
+            }
+        }
+    }, [selectedDate]);
+
+    // Keep URL in sync with the selected month using Inertia GET
+    useEffect(() => {
+        const year = selectedMonth.getFullYear();
+        const month = String(selectedMonth.getMonth() + 1).padStart(2, '0');
+        const dateParam = `${year}-${month}-01`;
+        router.get(
+            '/dashboard',
+            { date: dateParam },
+            { preserveScroll: true, preserveState: true, replace: true },
+        );
+    }, [selectedMonth]);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <header className="mt-4 flex justify-end px-4">
-                <SelectMonth
-                    selectedMonth={selectedMonth}
-                    onMonthSelect={setSelectedMonth}
-                />
+                <SelectMonth selectedMonth={selectedMonth} onMonthSelect={setSelectedMonth} />
             </header>
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 {/* Stats Cards */}
