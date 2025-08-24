@@ -36,3 +36,24 @@ export interface Transaction {
 	account?: Account;
 	category?: Category;
 }
+
+export interface Subscription {
+	id: number;
+	user_id: number;
+	account_id: number;
+	category_id: number;
+	vendor: string;
+	description?: string;
+	input_amount: number;
+	input_currency: string;
+	starts_on: string;
+	next_run_on: string;
+	last_run_on?: string;
+	interval_unit: 'day' | 'week' | 'month' | 'year';
+	active: boolean;
+	created_at: string;
+	updated_at: string;
+	// Relations
+	account?: Account;
+	category?: Category;
+}
