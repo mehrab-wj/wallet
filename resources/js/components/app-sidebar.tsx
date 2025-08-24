@@ -4,19 +4,19 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, WalletCards, Bolt, CalendarSync } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: '/dashboard',
-        icon: LayoutGrid,
+        icon: Bolt,
     },
     {
         title: 'Accounts',
         href: '/accounts',
-        icon: LayoutGrid,
+        icon: WalletCards,
     },
     {
         title: 'Categories',
@@ -26,7 +26,7 @@ const mainNavItems: NavItem[] = [
     {
         title: 'Subscriptions',
         href: '/subscriptions',
-        icon: LayoutGrid,
+        icon: CalendarSync,
     },
 ];
 
