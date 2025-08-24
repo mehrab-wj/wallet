@@ -224,6 +224,7 @@ export default function EditSubscriptionDrawer({
                             </DialogDescription>
 
                             <Form
+                                className="overflow-y-auto"
                                 method="delete"
                                 action={route('subscriptions.destroy', subscription.id)}
                                 onSuccess={() => onOpenChange(false)}

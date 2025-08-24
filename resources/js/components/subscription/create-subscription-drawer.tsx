@@ -37,7 +37,7 @@ export default function CreateSubscriptionDrawer({ open, onOpenChange, accounts,
     return (
         <Drawer open={open} onOpenChange={onOpenChange}>
             <DrawerContent>
-                <Form method="post" action={route('subscriptions.store')} onSuccess={handleSuccess} resetOnSuccess>
+                <Form className="overflow-y-auto" method="post" action={route('subscriptions.store')} onSuccess={handleSuccess} resetOnSuccess>
                     {({ processing, errors }) => (
                         <>
                             <DrawerHeader>
@@ -165,12 +165,7 @@ export default function CreateSubscriptionDrawer({ open, onOpenChange, accounts,
                                 </div>
 
                                 <div className="flex items-center space-x-2">
-                                    <Switch
-                                        id="active"
-                                        checked={isActive}
-                                        onCheckedChange={setIsActive}
-                                        disabled={processing}
-                                    />
+                                    <Switch id="active" checked={isActive} onCheckedChange={setIsActive} disabled={processing} />
                                     <input type="hidden" name="active" value={isActive ? '1' : '0'} />
                                     <Label htmlFor="active">Active</Label>
                                     <InputError message={errors.active} />
