@@ -7,8 +7,8 @@ use App\Http\Requests\SubscriptionRequest;
 use App\Models\Account;
 use App\Models\Category;
 use App\Models\Subscription;
-use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class SubscriptionController extends Controller
@@ -116,10 +116,7 @@ class SubscriptionController extends Controller
 
     public function update(SubscriptionRequest $request, Subscription $subscription)
     {
-        // Ensure the subscription belongs to the authenticated user
-        if ($subscription->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('update', $subscription);
 
         $validated = $request->validated();
 
@@ -172,10 +169,7 @@ class SubscriptionController extends Controller
 
     public function destroy(Subscription $subscription)
     {
-        // Ensure the subscription belongs to the authenticated user
-        if ($subscription->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('delete', $subscription);
 
         $subscription->delete();
 

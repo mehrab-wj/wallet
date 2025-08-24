@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AccountRequest;
 use App\Models\Account;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class AccountController extends Controller
@@ -22,6 +23,8 @@ class AccountController extends Controller
 
     public function store(AccountRequest $request)
     {
+        Gate::authorize('create', Account::class);
+
         $request->user()->accounts()->create($request->validated());
 
         return redirect()->back();
@@ -29,10 +32,7 @@ class AccountController extends Controller
 
     public function update(AccountRequest $request, Account $account)
     {
-        // Ensure the account belongs to the authenticated user
-        if ($account->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('update', $account);
 
         $account->update($request->validated());
 
@@ -41,10 +41,7 @@ class AccountController extends Controller
 
     public function destroy(Account $account)
     {
-        // Ensure the account belongs to the authenticated user
-        if ($account->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('delete', $account);
 
         $account->delete();
 

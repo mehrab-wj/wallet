@@ -7,6 +7,7 @@ use App\Http\Requests\TransactionRequest;
 use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class TransactionController extends Controller
@@ -43,10 +44,7 @@ class TransactionController extends Controller
 
     public function update(TransactionRequest $request, Transaction $transaction)
     {
-        // Ensure the transaction belongs to the authenticated user
-        if ($transaction->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('update', $transaction);
 
         $validated = $request->validated();
 
@@ -77,10 +75,7 @@ class TransactionController extends Controller
 
     public function destroy(Transaction $transaction)
     {
-        // Ensure the transaction belongs to the authenticated user
-        if ($transaction->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('delete', $transaction);
 
         $transaction->delete();
 

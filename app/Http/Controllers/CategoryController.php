@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Inertia\Inertia;
 
 class CategoryController extends Controller
@@ -29,6 +30,8 @@ class CategoryController extends Controller
 
     public function store(CategoryRequest $request)
     {
+        Gate::authorize('create', Category::class);
+
         Category::create([
             'user_id' => Auth::id(),
             'name' => $request->validated()['name'],
@@ -42,10 +45,7 @@ class CategoryController extends Controller
 
     public function update(CategoryRequest $request, Category $category)
     {
-        // Ensure the category belongs to the authenticated user
-        if ($category->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('update', $category);
 
         $category->update($request->validated());
 
@@ -54,10 +54,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-        // Ensure the category belongs to the authenticated user
-        if ($category->user_id !== Auth::id()) {
-            abort(403);
-        }
+        Gate::authorize('delete', $category);
 
         // If category has children, update them to have no parent
         Category::where('parent_id', $category->id)->update(['parent_id' => null]);
