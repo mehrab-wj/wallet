@@ -26,7 +26,7 @@ class SubscriptionFactory extends Factory
             'account_id' => Account::factory(),
             'category_id' => Category::factory()->expense(),
             'vendor' => fake()->company(),
-            'description' => fake()->sentence(),
+            'description' => null,
             'input_amount' => fake()->randomFloat(2, 5, 200),
             'input_currency' => fake()->randomElement(['USD', 'EUR', 'GBP', 'CAD']),
             'starts_on' => $startsOn,
