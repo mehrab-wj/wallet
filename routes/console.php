@@ -9,5 +9,5 @@ Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
 
-// Schedule the subscription processing job to run daily at 9:00 AM
-Schedule::job(new ProcessSubscriptions)->dailyAt('09:00');
+// Schedule the subscription processing job to run daily
+Schedule::job(new ProcessSubscriptions)->daily();
