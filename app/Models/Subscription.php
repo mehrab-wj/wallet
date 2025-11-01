@@ -85,11 +85,11 @@ class Subscription extends Model
         $currentDate = $this->next_run_on ?? $this->starts_on;
 
         return match ($this->interval_unit) {
-            'day' => $currentDate->addDay(),
-            'week' => $currentDate->addWeek(),
-            'month' => $currentDate->addMonth(),
-            'year' => $currentDate->addYear(),
-            default => $currentDate->addMonth(), // Default to monthly
+            'day' => $currentDate->copy()->addDay(),
+            'week' => $currentDate->copy()->addWeek(),
+            'month' => $currentDate->copy()->addMonth(),
+            'year' => $currentDate->copy()->addYear(),
+            default => $currentDate->copy()->addMonth(), // Default to monthly
         };
     }
 

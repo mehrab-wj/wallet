@@ -31,11 +31,30 @@ class ProcessSubscriptions implements ShouldQueue
             ->with(['user', 'account', 'category'])
             ->get();
 
+        // Log to both file and Telegram
+        Log::stack(["telegram"])->info("ProcessSubscriptions: Found {$subscriptions->count()} subscription(s) due for today (".now()->toDateString().')');
+
+        if ($subscriptions->isEmpty()) {
+            return;
+        }
+
+        $successCount = 0;
+        $failCount = 0;
+
         foreach ($subscriptions as $subscription) {
             try {
                 $this->processSubscription($subscription, $exchangeRate);
+                $successCount++;
+                Log::stack(["telegram"])->info("Successfully processed subscription ID: {$subscription->id} for user: {$subscription->user_id}");
             } catch (\Exception $e) {
-                Log::error("Failed to process subscription ID: {$subscription->id}. Error: {$e->getMessage()}");
+                $failCount++;
+                // Log errors to both file and Telegram
+                Log::stack(["telegram"])->error("Failed to process subscription ID: {$subscription->id}. Error: {$e->getMessage()}", [
+                    'subscription_id' => $subscription->id,
+                    'user_id' => $subscription->user_id,
+                    'vendor' => $subscription->vendor,
+                    'amount' => $subscription->input_amount.' '.$subscription->input_currency,
+                ]);
                 // Continue processing other subscriptions even if one fails
             }
         }
