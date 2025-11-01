@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+
 class ForceSSL
 {
     /**
@@ -20,7 +21,7 @@ class ForceSSL
             }
         }
 
-        if (!$request->secure() && app()->environment(['staging', 'production'])) {
+        if (! $request->secure() && app()->environment(['staging', 'production'])) {
             return redirect()->secure($request->getRequestUri(), 301);
         }
 

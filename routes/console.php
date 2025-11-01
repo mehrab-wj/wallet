@@ -1,5 +1,6 @@
 <?php
 
+use App\Jobs\ProcessMonthlyBudgets;
 use App\Jobs\ProcessSubscriptions;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
@@ -11,3 +12,6 @@ Artisan::command('inspire', function () {
 
 // Schedule the subscription processing job to run daily
 Schedule::job(new ProcessSubscriptions)->daily();
+
+// Schedule the monthly budget allocation job to run on the first day of each month
+Schedule::job(new ProcessMonthlyBudgets)->monthlyOn(1, '00:00');

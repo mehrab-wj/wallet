@@ -8,7 +8,6 @@ use App\Models\Account;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
-use Inertia\Inertia;
 
 class TransactionController extends Controller
 {

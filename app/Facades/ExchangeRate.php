@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Facade;
  * @method static array convertAmount(string $baseCurrency, string $targetCurrency, float $amount)
  * @method static float getRate(string $baseCurrency, string $targetCurrency)
  * @method static float convert(string $baseCurrency, string $targetCurrency, float $amount)
- * 
+ *
  * @see \App\Services\ExchangeRate
  */
 class ExchangeRate extends Facade

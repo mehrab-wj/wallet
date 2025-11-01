@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Facades\ExchangeRate;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Auth;
-use Inertia\Inertia;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Inertia\Inertia;
 
 class DashboardController extends Controller
 {

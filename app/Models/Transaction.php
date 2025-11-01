@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Transaction extends Model
@@ -79,5 +79,25 @@ class Transaction extends Model
     public function scopeExpense($query)
     {
         return $query->where('type', 'expense');
+    }
+
+    /**
+     * Get the budgets that are impacted by this transaction.
+     *
+     * @return \Illuminate\Support\Collection<int, Budget>
+     */
+    public function getBudgetImpact(): \Illuminate\Support\Collection
+    {
+        if ($this->type !== 'expense' || ! $this->category_id) {
+            return collect([]);
+        }
+
+        return Budget::where('user_id', $this->user_id)
+            ->active()
+            ->whereHas('categories', function ($query) {
+                $query->where('categories.id', $this->category_id);
+            })
+            ->with('categories')
+            ->get();
     }
 }

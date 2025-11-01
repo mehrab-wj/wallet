@@ -10,7 +10,6 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Services\ExchangeRate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class ProcessSubscriptionsTest extends TestCase
@@ -52,7 +51,7 @@ class ProcessSubscriptionsTest extends TestCase
 
         // Execute the job
         $job = (new ProcessSubscriptions)->withFakeQueueInteractions();
-        $job->handle(new ExchangeRate());
+        $job->handle(new ExchangeRate);
 
         // Assert that a transaction was created for the due subscription
         $this->assertDatabaseHas('transactions', [

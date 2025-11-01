@@ -22,7 +22,7 @@ class CreateDefaultCategoriesForUser
     {
         $user = $event->user;
 
-        if (!$user instanceof User) {
+        if (! $user instanceof User) {
             return;
         }
 

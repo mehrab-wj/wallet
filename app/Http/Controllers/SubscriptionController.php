@@ -178,6 +178,6 @@ class SubscriptionController extends Controller
 
     public function getDescription(?string $description): string
     {
-        return ($description ? $description . "\n\n" : "") . "This Transaction is created automatically by the system.";
+        return ($description ? $description."\n\n" : '').'This Transaction is created automatically by the system.';
     }
 }

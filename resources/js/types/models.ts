@@ -15,6 +15,8 @@ export interface Category {
 	sort_order: number;
 	created_at: string;
 	updated_at: string;
+	// Relations
+	budgets?: Budget[];
 }
 
 export interface Transaction {
@@ -56,4 +58,31 @@ export interface Subscription {
 	// Relations
 	account?: Account;
 	category?: Category;
+}
+
+export interface Budget {
+	id: number;
+	user_id: number;
+	name: string;
+	amount_type: 'fixed' | 'percentage';
+	amount_value: number;
+	active: boolean;
+	created_at: string;
+	updated_at: string;
+	// Computed properties (from controller)
+	allocated?: number;
+	spent?: number;
+	remaining?: number;
+	// Relations
+	categories?: Category[];
+}
+
+export interface BudgetAllocation {
+	id: number;
+	budget_id: number;
+	period: string;
+	amount: number;
+	created_at: string;
+	// Relations
+	budget?: Budget;
 }

@@ -48,24 +48,26 @@ class CategoryRequest extends FormRequest
                     if ($value === 'none' || $value === null || $value === '') {
                         return;
                     }
-                    
+
                     // Validate it's an integer
-                    if (!is_numeric($value)) {
+                    if (! is_numeric($value)) {
                         $fail('The parent category must be valid.');
+
                         return;
                     }
-                    
+
                     // Check if parent exists and belongs to user with same type
                     $parentExists = \App\Models\Category::where('id', $value)
                         ->where('user_id', Auth::id())
                         ->where('type', $this->type)
                         ->exists();
-                        
-                    if (!$parentExists) {
+
+                    if (! $parentExists) {
                         $fail('The selected parent category must belong to you and be of the same type.');
+
                         return;
                     }
-                    
+
                     // Prevent self-referencing (category cannot be its own parent)
                     if ($categoryId && $value == $categoryId) {
                         $fail('A category cannot be its own parent.');
