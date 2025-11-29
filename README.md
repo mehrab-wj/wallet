@@ -76,7 +76,6 @@ This app supports Progressive Web App features:
 - 🤖 Email automation to automatically read and categorize transactions
 - 📈 Advanced analytics and reporting
 - 📤 Export & Import functionality (CSV, PDF)
-- 🔄 Subscription management
 
 ## 🤝 Contributing
 
