@@ -38,15 +38,7 @@ interface StatsProps {
 }
 
 // Predefined chart colors using Shadcn variables
-const CHART_COLORS = [
-    'var(--chart-1)',
-    'var(--chart-2)',
-    'var(--chart-3)',
-    'var(--chart-4)',
-    'var(--chart-5)',
-    '#F6B1CE',
-    '#A3D78A'
-];
+const CHART_COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var(--chart-4)', 'var(--chart-5)', '#F6B1CE', '#A3D78A'];
 
 const MAX_PIE_CATEGORIES = 7;
 
@@ -99,10 +91,7 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
 
         const otherTotal = otherCategories.reduce((sum, cat) => sum + cat.value, 0);
 
-        return [
-            ...topCategories,
-            { name: 'Other', value: otherTotal },
-        ];
+        return [...topCategories, { name: 'Other', value: otherTotal }];
     }, [categoryStats]);
 
     // --- Configuration for Category Chart ---
@@ -161,33 +150,26 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                     <Card className="flex flex-col lg:col-span-3">
                         <CardHeader className="items-center pb-0">
                             <CardTitle>Category Breakdown</CardTitle>
-                            <CardDescription>
-                                {selectedMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                            </CardDescription>
+                            <CardDescription>{selectedMonth.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</CardDescription>
                         </CardHeader>
                         <CardContent className="flex-1 pb-0">
                             {categoryStats.length > 0 ? (
                                 <ChartContainer config={categoryChartConfig} className="mx-auto aspect-square max-h-[300px]">
                                     <PieChart>
                                         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                        <Pie
-                                            data={categoryChartData}
-                                            dataKey="value"
-                                            nameKey="name"
-                                            innerRadius={60}
-                                            strokeWidth={5}
-                                        >
+                                        <Pie data={categoryChartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
                                             {categoryChartData.map((entry, index) => (
                                                 <Cell key={`cell-${index}`} fill={entry.fill} />
                                             ))}
                                         </Pie>
-                                        <ChartLegend content={<ChartLegendContent nameKey="name" />} className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center" />
+                                        <ChartLegend
+                                            content={<ChartLegendContent nameKey="name" />}
+                                            className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                                        />
                                     </PieChart>
                                 </ChartContainer>
                             ) : (
-                                <div className="flex h-[300px] items-center justify-center text-muted-foreground">
-                                    No data for this period
-                                </div>
+                                <div className="flex h-[300px] items-center justify-center text-muted-foreground">No data for this period</div>
                             )}
                         </CardContent>
                         {categoryStats.length > 0 && (
@@ -217,21 +199,17 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                                     }}
                                 >
                                     <CartesianGrid vertical={false} />
-                                    <XAxis
-                                        dataKey="day"
-                                        tickLine={false}
-                                        axisLine={false}
-                                        tickMargin={8}
-                                    />
+                                    <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
                                     <ChartTooltip
                                         cursor={false}
-                                        content={<ChartTooltipContent indicator="line" labelFormatter={(value) => `${selectedMonth.toLocaleString('default', { month: 'short' })} ${value}`} />}
+                                        content={
+                                            <ChartTooltipContent
+                                                indicator="line"
+                                                labelFormatter={(value) => `${selectedMonth.toLocaleString('default', { month: 'short' })} ${value}`}
+                                            />
+                                        }
                                     />
-                                    <Bar
-                                        dataKey="amount"
-                                        fill="var(--color-amount)"
-                                        radius={[4, 4, 0, 0]}
-                                    />
+                                    <Bar dataKey="amount" fill="var(--color-amount)" radius={[4, 4, 0, 0]} />
                                 </BarChart>
                             </ChartContainer>
                         </CardContent>
@@ -265,6 +243,18 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                                         </td>
                                     </tr>
                                 )}
+
+                                <tr className="border-b last:border-0">
+                                    <td className="py-3 font-medium">
+                                        Sum
+                                    </td>
+                                    <td className="py-3 text-right">
+                                        {formatCurrency(
+                                            categoryStats.reduce((acc, curr) => acc + curr.value, 0),
+                                            mainCurrency,
+                                        )}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </CardContent>
