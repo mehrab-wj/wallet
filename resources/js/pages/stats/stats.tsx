@@ -44,9 +44,11 @@ const CHART_COLORS = [
     'var(--chart-3)',
     'var(--chart-4)',
     'var(--chart-5)',
+    '#F6B1CE',
+    '#A3D78A'
 ];
 
-const MAX_PIE_CATEGORIES = 5;
+const MAX_PIE_CATEGORIES = 7;
 
 export default function Stats({ filters, categoryStats, dailyStats, mainCurrency }: StatsProps) {
     const [selectedMonth, setSelectedMonth] = useState<Date>(new Date(filters.date));
