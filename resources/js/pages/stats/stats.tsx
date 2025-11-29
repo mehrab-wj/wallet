@@ -46,6 +46,8 @@ const CHART_COLORS = [
     'var(--chart-5)',
 ];
 
+const MAX_PIE_CATEGORIES = 5;
+
 export default function Stats({ filters, categoryStats, dailyStats, mainCurrency }: StatsProps) {
     const [selectedMonth, setSelectedMonth] = useState<Date>(new Date(filters.date));
     const [activeTab, setActiveTab] = useState<string>(filters.type);
@@ -82,29 +84,46 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
         );
     };
 
+    // Consolidate categories for pie chart - group smaller ones into "Other"
+    const consolidatedCategoryData = useMemo(() => {
+        if (categoryStats.length <= MAX_PIE_CATEGORIES) {
+            return categoryStats;
+        }
+
+        // Sort by value descending and take top categories
+        const sorted = [...categoryStats].sort((a, b) => b.value - a.value);
+        const topCategories = sorted.slice(0, MAX_PIE_CATEGORIES - 1);
+        const otherCategories = sorted.slice(MAX_PIE_CATEGORIES - 1);
+
+        const otherTotal = otherCategories.reduce((sum, cat) => sum + cat.value, 0);
+
+        return [
+            ...topCategories,
+            { name: 'Other', value: otherTotal },
+        ];
+    }, [categoryStats]);
+
     // --- Configuration for Category Chart ---
     const categoryChartConfig = useMemo(() => {
         const config: ChartConfig = {
             amount: { label: 'Amount' },
         };
-        categoryStats.forEach((stat, index) => {
-            // Use category name as key for config if needed, or just rely on data mapping
-            // Here we map the category name to a color for the Legend/Tooltip
+        consolidatedCategoryData.forEach((stat, index) => {
             config[stat.name] = {
                 label: stat.name,
                 color: CHART_COLORS[index % CHART_COLORS.length],
             };
         });
         return config;
-    }, [categoryStats]);
+    }, [consolidatedCategoryData]);
 
     // Add fill color to data for Pie Chart
     const categoryChartData = useMemo(() => {
-        return categoryStats.map((stat, index) => ({
+        return consolidatedCategoryData.map((stat, index) => ({
             ...stat,
             fill: CHART_COLORS[index % CHART_COLORS.length],
         }));
-    }, [categoryStats]);
+    }, [consolidatedCategoryData]);
 
     // --- Configuration for Daily Chart ---
     const dailyChartConfig = {
