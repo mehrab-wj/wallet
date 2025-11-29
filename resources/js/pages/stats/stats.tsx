@@ -35,6 +35,11 @@ interface StatsProps {
     categoryStats: CategoryStat[];
     dailyStats: DailyStat[];
     mainCurrency: string;
+    stats: {
+        income: number;
+        expense: number;
+        total: number;
+    };
 }
 
 // Predefined chart colors using Shadcn variables
@@ -42,9 +47,10 @@ const CHART_COLORS = ['var(--chart-1)', 'var(--chart-2)', 'var(--chart-3)', 'var
 
 const MAX_PIE_CATEGORIES = 7;
 
-export default function Stats({ filters, categoryStats, dailyStats, mainCurrency }: StatsProps) {
+export default function Stats({ filters, categoryStats, dailyStats, mainCurrency, stats }: StatsProps) {
     const [selectedMonth, setSelectedMonth] = useState<Date>(new Date(filters.date));
     const [activeTab, setActiveTab] = useState<string>(filters.type);
+    const { income, expense, total } = stats;
 
     // Sync local state with props when they change (e.g. browser back button)
     useEffect(() => {
@@ -144,6 +150,24 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
 
                     <SelectMonth selectedMonth={selectedMonth} onMonthSelect={handleMonthChange} />
                 </div>
+
+                {/* Stats Cards */}
+                <Card className="grid grid-cols-3 gap-1 overflow-hidden text-center">
+                    <div>
+                        <span className="block text-xs font-medium">Income</span>
+                        <span className="text-sm font-semibold">{formatCurrency(income, mainCurrency)}</span>
+                    </div>
+                    <div>
+                        <span className="block text-xs font-medium">Expense</span>
+                        <span className="text-sm font-semibold">{formatCurrency(expense, mainCurrency)}</span>
+                    </div>
+                    <div>
+                        <span className="block text-xs font-medium">Total</span>
+                        <span className={`text-sm font-semibold ${total > 0 ? 'text-green-600 dark:text-green-400' : 'text-destructive'}`}>
+                            {formatCurrency(total, mainCurrency)}
+                        </span>
+                    </div>
+                </Card>
 
                 <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-7">
                     {/* Category Breakdown (Pie Chart) */}

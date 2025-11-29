@@ -32,6 +32,29 @@ class StatsController extends Controller
         $startOfMonth = $baseDate->copy()->startOfMonth();
         $endOfMonth = $baseDate->copy()->endOfMonth();
 
+        // --- 0. Total Stats (Income, Expense, Total) ---
+        $groupedSums = Transaction::selectRaw('transactions.type, accounts.currency, SUM(transactions.amount) as sum_amount')
+            ->join('accounts', 'transactions.account_id', '=', 'accounts.id')
+            ->where('transactions.user_id', $user->id)
+            ->whereBetween('transactions.transaction_date', [$startOfMonth, $endOfMonth])
+            ->groupBy('transactions.type', 'accounts.currency')
+            ->get();
+
+        $income = 0.0;
+        $expense = 0.0;
+
+        foreach ($groupedSums as $row) {
+            $converted = $this->convertToMainCurrency($row->sum_amount, $row->currency, $mainCurrency);
+            
+            if ($row->type === 'income') {
+                $income += $converted;
+            } elseif ($row->type === 'expense') {
+                $expense += $converted;
+            }
+        }
+
+        $total = $income - $expense;
+
         // --- 1. Category Stats (Donut Chart) ---
         // Group by category and currency to handle conversions
         $categoryDataRaw = Transaction::selectRaw('categories.name as category_name, categories.id as category_id, accounts.currency, SUM(transactions.amount) as total_amount')
@@ -104,7 +127,13 @@ class StatsController extends Controller
                 'date' => $baseDate->toDateString(),
                 'type' => $type,
             ],
+            'stats' => [
+                'income' => $income,
+                'expense' => $expense,
+                'total' => $total,
+            ],
             'categoryStats' => $categoryChartData,
+
             'dailyStats' => $dailyChartData,
             'mainCurrency' => $mainCurrency,
         ]);
