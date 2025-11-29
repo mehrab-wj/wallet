@@ -7,7 +7,7 @@ import { formatCurrency } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
-import { Area, AreaChart, CartesianGrid, Cell, Pie, PieChart, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, XAxis } from 'recharts';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -208,7 +208,7 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                         </CardHeader>
                         <CardContent>
                             <ChartContainer config={dailyChartConfig} className="aspect-auto h-[300px] w-full">
-                                <AreaChart
+                                <BarChart
                                     accessibilityLayer
                                     data={dailyStats}
                                     margin={{
@@ -227,14 +227,12 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                                         cursor={false}
                                         content={<ChartTooltipContent indicator="line" labelFormatter={(value) => `${selectedMonth.toLocaleString('default', { month: 'short' })} ${value}`} />}
                                     />
-                                    <Area
+                                    <Bar
                                         dataKey="amount"
-                                        type="natural"
                                         fill="var(--color-amount)"
-                                        fillOpacity={0.4}
-                                        stroke="var(--color-amount)"
+                                        radius={[4, 4, 0, 0]}
                                     />
-                                </AreaChart>
+                                </BarChart>
                             </ChartContainer>
                         </CardContent>
                     </Card>
