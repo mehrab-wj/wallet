@@ -237,6 +237,38 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                         </CardContent>
                     </Card>
                 </div>
+
+                {/* Transactions by Category Table */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Transactions by Category</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <table className="w-full text-sm">
+                            <thead>
+                                <tr className="border-b">
+                                    <th className="h-12 text-left font-medium text-muted-foreground">Category</th>
+                                    <th className="h-12 text-right font-medium text-muted-foreground">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {categoryStats.map((stat) => (
+                                    <tr key={stat.name} className="border-b last:border-0">
+                                        <td className="py-3 font-medium">{stat.name}</td>
+                                        <td className="py-3 text-right">{formatCurrency(stat.value, mainCurrency)}</td>
+                                    </tr>
+                                ))}
+                                {categoryStats.length === 0 && (
+                                    <tr>
+                                        <td colSpan={2} className="py-6 text-center text-muted-foreground">
+                                            No transactions found
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </CardContent>
+                </Card>
             </div>
         </AppLayout>
     );
