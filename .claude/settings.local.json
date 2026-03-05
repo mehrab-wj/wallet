@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd:*)",
+      "Bash(cd /c/Users/mehrab/Desktop/PHP/wallet && vendor/bin/pint --dirty 2>&1)",
+      "Bash(cd /c/Users/mehrab/Desktop/PHP/wallet && npm run types 2>&1)",
+      "Bash(cd /c/Users/mehrab/Desktop/PHP/wallet && npm run lint 2>&1 && npm run format 2>&1)"
+    ]
+  }
+}
