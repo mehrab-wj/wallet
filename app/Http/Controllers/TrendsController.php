@@ -16,9 +16,9 @@ class TrendsController extends Controller
         $user = Auth::user();
         $mainCurrency = $user->main_currency;
 
-        $range = (int) $request->query('range', 6);
+        $range = (int) $request->query('range', 12);
         if (! in_array($range, [3, 6, 12])) {
-            $range = 6;
+            $range = 12;
         }
 
         $endDate = Carbon::now()->endOfMonth();
