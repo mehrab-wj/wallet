@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { Bolt, CalendarSync, ChartLine, Folder, LayoutGrid, Wallet, WalletCards } from 'lucide-react';
+import { Bolt, CalendarSync, ChartLine, Folder, LayoutGrid, TrendingUp, Wallet, WalletCards } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -32,6 +32,11 @@ const mainNavItems: NavItem[] = [
         title: 'Stats',
         href: '/stats',
         icon: ChartLine,
+    },
+    {
+        title: 'Trends',
+        href: '/trends',
+        icon: TrendingUp,
     },
     {
         title: 'Subscriptions',

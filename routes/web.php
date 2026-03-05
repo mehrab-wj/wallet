@@ -14,6 +14,7 @@ Route::get('/', fn () => Redirect::route('dashboard'))->name('home');
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('stats', [\App\Http\Controllers\StatsController::class, 'index'])->name('stats');
+    Route::get('trends', [\App\Http\Controllers\TrendsController::class, 'index'])->name('trends');
 
     Route::resource('accounts', AccountController::class)->except(['show', 'create', 'edit']);
     Route::resource('categories', CategoryController::class)->except(['show', 'create', 'edit']);
