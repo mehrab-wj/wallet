@@ -37,11 +37,7 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
     };
 
     const toggleCategory = (categoryId: number) => {
-        setSelectedCategories((prev) =>
-            prev.includes(categoryId)
-                ? prev.filter((id) => id !== categoryId)
-                : [...prev, categoryId]
-        );
+        setSelectedCategories((prev) => (prev.includes(categoryId) ? prev.filter((id) => id !== categoryId) : [...prev, categoryId]));
     };
 
     if (!budget) {
@@ -95,9 +91,7 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
                                     </div>
 
                                     <div className="space-y-2">
-                                        <Label htmlFor="edit-amount_value">
-                                            {amountType === 'fixed' ? 'Amount' : 'Percentage'}
-                                        </Label>
+                                        <Label htmlFor="edit-amount_value">{amountType === 'fixed' ? 'Amount' : 'Percentage'}</Label>
                                         <div className="relative">
                                             <Input
                                                 id="edit-amount_value"
@@ -112,9 +106,7 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
                                                 disabled={processing}
                                             />
                                             {amountType === 'percentage' && (
-                                                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-muted-foreground">
-                                                    %
-                                                </span>
+                                                <span className="absolute top-1/2 right-3 -translate-y-1/2 text-sm text-muted-foreground">%</span>
                                             )}
                                         </div>
                                         <InputError message={errors.amount_value} />
@@ -123,9 +115,7 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
 
                                 <div className="space-y-2">
                                     <Label>Categories</Label>
-                                    <p className="text-sm text-muted-foreground">
-                                        Select the expense categories to include in this budget
-                                    </p>
+                                    <p className="text-sm text-muted-foreground">Select the expense categories to include in this budget</p>
                                     <div className="max-h-60 space-y-2 overflow-y-auto rounded-md border p-4">
                                         {expenseCategories.map((category) => (
                                             <div key={category.id} className="flex items-center space-x-2">
@@ -137,7 +127,7 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
                                                 />
                                                 <label
                                                     htmlFor={`edit-category-${category.id}`}
-                                                    className="flex-1 cursor-pointer text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                                    className="flex-1 cursor-pointer text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                                 >
                                                     {category.name}
                                                 </label>
@@ -145,23 +135,13 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
                                         ))}
                                     </div>
                                     {selectedCategories.map((categoryId) => (
-                                        <input
-                                            key={categoryId}
-                                            type="hidden"
-                                            name="category_ids[]"
-                                            value={categoryId}
-                                        />
+                                        <input key={categoryId} type="hidden" name="category_ids[]" value={categoryId} />
                                     ))}
                                     <InputError message={errors.category_ids} />
                                 </div>
 
                                 <div className="flex items-center space-x-2">
-                                    <Switch
-                                        id="edit-active"
-                                        checked={isActive}
-                                        onCheckedChange={setIsActive}
-                                        disabled={processing}
-                                    />
+                                    <Switch id="edit-active" checked={isActive} onCheckedChange={setIsActive} disabled={processing} />
                                     <input type="hidden" name="active" value={isActive ? '1' : '0'} />
                                     <Label htmlFor="edit-active">Active</Label>
                                     <InputError message={errors.active} />
@@ -183,4 +163,3 @@ export default function EditBudgetDrawer({ open, onOpenChange, budget, expenseCa
         </Drawer>
     );
 }
-

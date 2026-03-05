@@ -29,9 +29,7 @@ export function DateSeparator({ date }: DateSeparatorProps) {
 
     return (
         <div className="flex items-center gap-3 py-2">
-            <h3 className="text-sm font-medium text-muted-foreground">
-                {formatDate(date)}
-            </h3>
+            <h3 className="text-sm font-medium text-muted-foreground">{formatDate(date)}</h3>
             <div className="flex-1 border-t border-border"></div>
         </div>
     );

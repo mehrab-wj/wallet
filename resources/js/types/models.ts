@@ -1,88 +1,88 @@
 export interface Account {
-	id: number;
-	name: string;
-	currency: string;
-	created_at: string;
-	updated_at: string;
+    id: number;
+    name: string;
+    currency: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface Category {
-	id: number;
-	user_id: number;
-	name: string;
-	type: 'expense' | 'income';
-	parent_id?: number | null;
-	sort_order: number;
-	created_at: string;
-	updated_at: string;
-	// Relations
-	budgets?: Budget[];
+    id: number;
+    user_id: number;
+    name: string;
+    type: 'expense' | 'income';
+    parent_id?: number | null;
+    sort_order: number;
+    created_at: string;
+    updated_at: string;
+    // Relations
+    budgets?: Budget[];
 }
 
 export interface Transaction {
-	id: number;
-	user_id: number;
-	account_id: number;
-	category_id: number;
-	type: 'income' | 'expense';
-	input_amount: number;
-	input_currency: string;
-	amount: number;
-	rate?: number;
-	label?: string;
-	description?: string;
-	transaction_date: string;
-	created_at: string;
-	updated_at: string;
-	// Relations
-	account?: Account;
-	category?: Category;
+    id: number;
+    user_id: number;
+    account_id: number;
+    category_id: number;
+    type: 'income' | 'expense';
+    input_amount: number;
+    input_currency: string;
+    amount: number;
+    rate?: number;
+    label?: string;
+    description?: string;
+    transaction_date: string;
+    created_at: string;
+    updated_at: string;
+    // Relations
+    account?: Account;
+    category?: Category;
 }
 
 export interface Subscription {
-	id: number;
-	user_id: number;
-	account_id: number;
-	category_id: number;
-	vendor: string;
-	description?: string;
-	input_amount: number;
-	input_currency: string;
-	starts_on: string;
-	next_run_on: string;
-	last_run_on?: string;
-	interval_unit: 'day' | 'week' | 'month' | 'year';
-	active: boolean;
-	created_at: string;
-	updated_at: string;
-	// Relations
-	account?: Account;
-	category?: Category;
+    id: number;
+    user_id: number;
+    account_id: number;
+    category_id: number;
+    vendor: string;
+    description?: string;
+    input_amount: number;
+    input_currency: string;
+    starts_on: string;
+    next_run_on: string;
+    last_run_on?: string;
+    interval_unit: 'day' | 'week' | 'month' | 'year';
+    active: boolean;
+    created_at: string;
+    updated_at: string;
+    // Relations
+    account?: Account;
+    category?: Category;
 }
 
 export interface Budget {
-	id: number;
-	user_id: number;
-	name: string;
-	amount_type: 'fixed' | 'percentage';
-	amount_value: number;
-	active: boolean;
-	created_at: string;
-	updated_at: string;
-	// Computed properties (from controller)
-	allocated?: number;
-	spent?: number;
-	remaining?: number;
-	// Relations
-	categories?: Category[];
+    id: number;
+    user_id: number;
+    name: string;
+    amount_type: 'fixed' | 'percentage';
+    amount_value: number;
+    active: boolean;
+    created_at: string;
+    updated_at: string;
+    // Computed properties (from controller)
+    allocated?: number;
+    spent?: number;
+    remaining?: number;
+    // Relations
+    categories?: Category[];
 }
 
 export interface BudgetAllocation {
-	id: number;
-	budget_id: number;
-	period: string;
-	amount: number;
-	created_at: string;
-	// Relations
-	budget?: Budget;
+    id: number;
+    budget_id: number;
+    period: string;
+    amount: number;
+    created_at: string;
+    // Relations
+    budget?: Budget;
 }

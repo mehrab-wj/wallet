@@ -265,9 +265,7 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                                 )}
 
                                 <tr className="border-b last:border-0">
-                                    <td className="py-3 font-medium">
-                                        Sum
-                                    </td>
+                                    <td className="py-3 font-medium">Sum</td>
                                     <td className="py-3 text-right">
                                         {formatCurrency(
                                             categoryStats.reduce((acc, curr) => acc + curr.value, 0),

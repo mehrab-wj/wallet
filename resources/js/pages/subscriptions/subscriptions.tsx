@@ -191,23 +191,23 @@ export default function Subscriptions({ subscriptions, accounts, expenseCategori
                     ))}
                 </div>
 
-                                 {/* Create Subscription Drawer */}
-                 <CreateSubscriptionDrawer 
-                     open={isCreateDrawerOpen}
-                     onOpenChange={setIsCreateDrawerOpen}
-                     accounts={accounts}
-                     expenseCategories={expenseCategories}
-                 />
+                {/* Create Subscription Drawer */}
+                <CreateSubscriptionDrawer
+                    open={isCreateDrawerOpen}
+                    onOpenChange={setIsCreateDrawerOpen}
+                    accounts={accounts}
+                    expenseCategories={expenseCategories}
+                />
 
-                 {/* Edit Subscription Drawer */}
-                 <EditSubscriptionDrawer
-                     open={isEditDrawerOpen}
-                     onOpenChange={setIsEditDrawerOpen}
-                     accounts={accounts}
-                     expenseCategories={expenseCategories}
-                     subscription={editingSubscription}
-                     onSuccess={resetEditDrawer}
-                 />
+                {/* Edit Subscription Drawer */}
+                <EditSubscriptionDrawer
+                    open={isEditDrawerOpen}
+                    onOpenChange={setIsEditDrawerOpen}
+                    accounts={accounts}
+                    expenseCategories={expenseCategories}
+                    subscription={editingSubscription}
+                    onSuccess={resetEditDrawer}
+                />
             </div>
         </AppLayout>
     );
