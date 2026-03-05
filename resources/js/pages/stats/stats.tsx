@@ -7,7 +7,7 @@ import { formatCurrency } from '@/lib/utils';
 import { BreadcrumbItem } from '@/types';
 import { Head, router } from '@inertiajs/react';
 import { useEffect, useMemo, useState } from 'react';
-import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, XAxis } from 'recharts';
+import { Bar, BarChart, CartesianGrid, Pie, PieChart, XAxis } from 'recharts';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -180,15 +180,11 @@ export default function Stats({ filters, categoryStats, dailyStats, mainCurrency
                             {categoryStats.length > 0 ? (
                                 <ChartContainer config={categoryChartConfig} className="mx-auto aspect-square max-h-[300px]">
                                     <PieChart>
-                                        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-                                        <Pie data={categoryChartData} dataKey="value" nameKey="name" innerRadius={60} strokeWidth={5}>
-                                            {categoryChartData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.fill} />
-                                            ))}
-                                        </Pie>
+                                        <ChartTooltip cursor={false} content={<ChartTooltipContent nameKey="name" hideLabel />} />
+                                        <Pie data={categoryChartData} dataKey="value" nameKey="name" />
                                         <ChartLegend
                                             content={<ChartLegendContent nameKey="name" />}
-                                            className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
+                                            className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
                                         />
                                     </PieChart>
                                 </ChartContainer>
