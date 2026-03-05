@@ -157,7 +157,11 @@ export default function Trends({ monthlyData, categoryMonthlyData, categories, m
                                                 width={80}
                                             />
                                             <ChartTooltip
-                                                content={<ChartTooltipContent formatter={(value) => currencyFormatter(value as number)} />}
+                                                content={
+                                                    <ChartTooltipContent
+                                                        formatter={(value, name) => [currencyFormatter(value as number), ` - ${name}`]}
+                                                    />
+                                                }
                                             />
                                             {categories.map((cat, index) => (
                                                 <Bar
